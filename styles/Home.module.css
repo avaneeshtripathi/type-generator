@@ -13,6 +13,35 @@
 
 .topActionsCtr {
   margin-top: 16px;
+  border: 1px solid #000;
+  display: flex;
+}
+
+.singleActionsWrapper {
+  display: flex;
+  margin-left: auto;
+}
+
+.singleActionCtr {
+  display: grid;
+  grid-gap: 6px;
+  padding: 12px;
+}
+
+.singleActionsWrapper .singleActionCtr {
+  border-left: 1px solid #000;
+}
+
+.actionInput {
+  width: 100px;
+  border: 1px solid #000;
+  outline: unset;
+  padding-block: 4px;
+  padding-inline: 6px;
+}
+
+.pasteActionCtr {
+  margin-top: 16px;
 }
 
 .textBoxCtr {
@@ -34,6 +63,14 @@
   cursor: pointer;
   background-color: #fff;
   border: 1px solid #000;
+}
+
+.activeCta {
+  background-color: #d1d1d1;
+}
+
+.button + .button {
+  margin-left: -1px;
 }
 
 .parsingError {
