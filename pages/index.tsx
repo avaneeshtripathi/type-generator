@@ -139,7 +139,7 @@ const Home: NextPage = () => {
             <input
               className={styles.actionTextInput}
               value={initialTypeLabel}
-              placeholder="Example: Response"
+              placeholder="Ex: Response"
               onChange={handleInitialTypeLabelChange}
             />
           </div>
