@@ -70,7 +70,12 @@
         "subtopic": "Demographics"
       },
       "name": "acs_yg_total_population_1",
-      "substitutions": []
+      "substitutions": [
+        {
+          "estimation": "ACS",
+          "duration": 2
+        }
+      ]
     }
   ]
 }

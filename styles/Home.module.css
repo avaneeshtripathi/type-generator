@@ -32,8 +32,16 @@
   border-left: 1px solid #000;
 }
 
-.actionInput {
+.actionNumberInput {
   width: 100px;
+  border: 1px solid #000;
+  outline: unset;
+  padding-block: 4px;
+  padding-inline: 6px;
+}
+
+.actionTextInput {
+  width: 160px;
   border: 1px solid #000;
   outline: unset;
   padding-block: 4px;

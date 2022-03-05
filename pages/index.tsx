@@ -102,6 +102,10 @@ const Home: NextPage = () => {
     []
   );
 
+  const handleInitialTypeLabelChange = useCallback((event) => {
+    setInitialTypeLabel(event.target.value.replace(/ /g, ""));
+  }, []);
+
   return (
     <>
       <Header />
@@ -111,16 +115,16 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.singleActionsWrapper}>
           <div className={styles.singleActionCtr}>
-            <span>Spacing: </span>
+            <span>Spacing:</span>
             <input
               type="number"
-              className={styles.actionInput}
+              className={styles.actionNumberInput}
               value={spacingLength}
               onChange={handleSpacingChange}
             />
           </div>
           <div className={styles.singleActionCtr}>
-            <span>Format: </span>
+            <span>Format:</span>
             <div onClick={toggleFormat}>
               <Button {...(typeFormat && { className: styles.activeCta })}>
                 THelloWorld
@@ -130,11 +134,17 @@ const Home: NextPage = () => {
               </Button>
             </div>
           </div>
+          <div className={styles.singleActionCtr}>
+            <span>Initial Type Label:</span>
+            <input
+              className={styles.actionTextInput}
+              value={initialTypeLabel}
+              placeholder="Example: Response"
+              onChange={handleInitialTypeLabelChange}
+            />
+          </div>
         </div>
       </div>
-      {/* <div className={`${styles.container} ${styles.pasteActionCtr}`}>
-        
-      </div> */}
       <div className={`${styles.container} ${styles.textBoxCtr}`}>
         <Textbox
           placeholder="Paste the JSON here..."
