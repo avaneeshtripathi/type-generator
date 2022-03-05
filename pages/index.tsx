@@ -42,6 +42,10 @@ const getTypeForObject = (
       }
     });
     typesStr += "}";
+  } else if (Array.isArray(obj)) {
+    const keyName = getFormattedTypeLabel(`${name}_HelloWorldArr`);
+    typesStr += `T${keyName}[];\n`;
+    getTypeForObject(obj[0], spacing, keyName, typesStrArr);
   } else {
     typesStr += `${obj === null ? "null" : typeof obj};`;
   }
@@ -54,6 +58,7 @@ const Home: NextPage = () => {
   const [stringifiedJson, setStringifiedJson] = useState("");
   const [convertedData, setConvertedData] = useState("");
   const [spacing, setSpacig] = useState("    ");
+  const [startingType, setStartingType] = useState("");
   const [conversionError, setConversionError] = useState(false);
 
   const handleKeyDown = useCallback((event) => {
@@ -86,7 +91,7 @@ const Home: NextPage = () => {
 
   const getStringifiedTypes = useCallback(
     (jsonData: Record<string, any>) => {
-      return getTypeForObject(jsonData, spacing, "HelloTypes", []).join("");
+      return getTypeForObject(jsonData, spacing, startingType, []).join("");
     },
     [spacing]
   );
@@ -102,6 +107,7 @@ const Home: NextPage = () => {
     }
 
     const stringifiedTypes = getStringifiedTypes(jsonData);
+
     setConvertedData(stringifiedTypes);
     setStringifiedJson(JSON.stringify(JSON.parse(stringifiedJson), null, 4));
   }, [stringifiedJson]);
