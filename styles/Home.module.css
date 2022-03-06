@@ -87,3 +87,21 @@
   margin-top: 16;
   color: red;
 }
+
+.curlInputWrapper {
+  display: flex;
+  padding: 12px;
+  margin-top: 16px;
+  border: 1px solid #000;
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 1fr auto;
+}
+
+.curlTextInput {
+  height: 100%;
+  border: 1px solid #000;
+  outline: unset;
+  padding-block: 4px;
+  padding-inline: 6px;
+}

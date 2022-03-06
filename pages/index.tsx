@@ -26,6 +26,8 @@ const Home: NextPage = () => {
   const [typeFormat, setTypeFormat] = useState(true);
   const [conversionError, setConversionError] = useState(false);
 
+  const [curlRequest, setCurlRequest] = useState("");
+
   const handleKeyDown = useCallback((event) => {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -106,6 +108,31 @@ const Home: NextPage = () => {
     setInitialTypeLabel(event.target.value.replace(/ /g, ""));
   }, []);
 
+  const onSubmitCurl = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const response = await fetch("/api/curl", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ data: curlRequest }),
+      });
+      const respJson = await response.json();
+      if (response.status === 200) {
+        try {
+          setStringifiedJson(JSON.stringify(respJson));
+          setCurlRequest("");
+          return;
+        } catch (e) {}
+      }
+
+      alert(`Error: ${respJson.message}`);
+    },
+    [curlRequest]
+  );
+
   return (
     <>
       <Header />
@@ -145,6 +172,18 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
+      <form
+        className={`${styles.container} ${styles.curlInputWrapper}`}
+        onSubmit={onSubmitCurl}
+      >
+        <input
+          className={styles.curlTextInput}
+          placeholder="Paste cURL here to fetch JSON"
+          value={curlRequest}
+          onChange={(event) => setCurlRequest(event.target.value)}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
       <div className={`${styles.container} ${styles.textBoxCtr}`}>
         <Textbox
           placeholder="Paste the JSON here..."
