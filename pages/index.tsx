@@ -172,7 +172,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <form
+      {/* <form
         className={`${styles.container} ${styles.curlInputWrapper}`}
         onSubmit={onSubmitCurl}
       >
@@ -183,7 +183,7 @@ const Home: NextPage = () => {
           onChange={(event) => setCurlRequest(event.target.value)}
         />
         <Button type="submit">Submit</Button>
-      </form>
+      </form> */}
       <div className={`${styles.container} ${styles.textBoxCtr}`}>
         <Textbox
           placeholder="Paste the JSON here..."
