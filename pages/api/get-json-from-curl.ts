@@ -1,5 +1,5 @@
+import curlToFetch from "curl-to-fetch";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getStringifiedTypes } from "../../utils/helper";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,13 +9,13 @@ export default async function handler(
     res.status(403).json({ message: "Method not allowed." });
     return;
   }
+
   try {
-    const data = getStringifiedTypes(
-      req.body.json,
-      req.body.spacing,
-      req.body.label,
-      req.body.format
-    );
+    const apiRequest = curlToFetch(req.body.curl);
+    const [fetchRequest] = apiRequest.split(".then");
+    const response = await eval(fetchRequest);
+    const data = await response.json();
+
     res.status(200).json({ data });
   } catch (error: any) {
     res.status(503).json({ message: error.message });
