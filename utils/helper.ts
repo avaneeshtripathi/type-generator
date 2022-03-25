@@ -9,6 +9,16 @@ const getFormattedKey = (key: string) => {
   return key.includes(" ") ? `"${key}"` : key;
 };
 
+export const getStringifiedTypes = (
+  jsonData: Record<string, any>,
+  spacing: string,
+  label: string,
+  format: boolean
+) => {
+  /** More things to come up here */
+  return getTypeForObject(jsonData, spacing, label, [], format).join("");
+};
+
 export const getTypeForObject = (
   obj: Record<string, any>,
   spacing: string,
