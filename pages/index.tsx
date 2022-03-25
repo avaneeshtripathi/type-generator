@@ -6,6 +6,7 @@ import Button from "@components/Button";
 import styles from "@styles/Home.module.css";
 import testJson from "@data/test.json";
 import { getStringifiedTypes } from "@utils/helper";
+import { toast } from "react-toastify";
 
 const Home: NextPage = () => {
   const [stringifiedJson, setStringifiedJson] = useState("");
@@ -66,7 +67,9 @@ const Home: NextPage = () => {
       );
       setConvertedData(data);
     } catch (e) {
-      alert("Error: There is an error parsing the JSON");
+      toast.error("Error! There is an error parsing the JSON", {
+        autoClose: 2000,
+      });
     }
   }, [stringifiedJson, initialTypeLabel, typeFormat]);
 
@@ -93,6 +96,9 @@ const Home: NextPage = () => {
   const onSubmitCurl = useCallback(
     async (event) => {
       event.preventDefault();
+      const toastId = toast.info("Fetching API response...", {
+        autoClose: 10000,
+      });
       const response = await fetch("/api/get-json-from-curl", {
         headers: {
           Accept: "application/json",
@@ -112,10 +118,19 @@ const Home: NextPage = () => {
         );
         setConvertedData(data);
         setStringifiedJson(JSON.stringify(respJson));
+        toast.update(toastId, {
+          type: toast.TYPE.SUCCESS,
+          render: "Success! Types generated successflly.",
+          autoClose: 2000,
+        });
         return;
       }
 
-      alert(`Error: ${respJson.message}`);
+      toast.update(toastId, {
+        type: toast.TYPE.ERROR,
+        render: `Error! ${respJson.message}`,
+        autoClose: 2000,
+      });
     },
     [curlRequest, initialTypeLabel, typeFormat]
   );

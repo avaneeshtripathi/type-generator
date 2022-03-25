@@ -13,4 +13,9 @@ a {
 
 * {
   box-sizing: border-box;
+  margin: unset;
+}
+
+.Toastify__toast-container {
+  filter: grayscale();
 }
