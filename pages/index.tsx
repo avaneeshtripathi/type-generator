@@ -4,8 +4,8 @@ import Header from "@components/Header";
 import Textbox from "@components/Textbox";
 import Button from "@components/Button";
 import styles from "@styles/Home.module.css";
-import { getTypeForObject } from "@utils/helper";
 import testJson from "@data/test.json";
+import { getStringifiedTypes } from "@utils/helper";
 
 const Home: NextPage = () => {
   const [stringifiedJson, setStringifiedJson] = useState("");
@@ -56,37 +56,19 @@ const Home: NextPage = () => {
     [conversionError]
   );
 
-  const getStringifiedTypes = useCallback(
-    (jsonData: Record<string, any>) => {
-      /** More things to come up here */
-      return getTypeForObject(
-        jsonData,
+  const onConvert = useCallback(async () => {
+    try {
+      const data = getStringifiedTypes(
+        JSON.parse(stringifiedJson),
         spacing.current,
         initialTypeLabel,
-        [],
         typeFormat
-      ).join("");
-    },
-    [initialTypeLabel, typeFormat]
-  );
-
-  const onConvert = useCallback(() => {
-    let jsonData;
-    try {
-      jsonData = JSON.parse(stringifiedJson);
-    } catch (e) {}
-
-    if (!jsonData) {
-      return setConversionError(true);
+      );
+      setConvertedData(data);
+    } catch (e) {
+      alert("Error: There is an error parsing the JSON");
     }
-
-    const stringifiedTypes = getStringifiedTypes(jsonData);
-
-    setConvertedData(stringifiedTypes);
-    setStringifiedJson(
-      JSON.stringify(JSON.parse(stringifiedJson), null, spacing.current)
-    );
-  }, [stringifiedJson, getStringifiedTypes]);
+  }, [stringifiedJson, initialTypeLabel, typeFormat]);
 
   const pasteTestJson = useCallback(
     () => setStringifiedJson(JSON.stringify(testJson)),
@@ -111,26 +93,31 @@ const Home: NextPage = () => {
   const onSubmitCurl = useCallback(
     async (event) => {
       event.preventDefault();
-      const response = await fetch("/api/curl", {
+      const response = await fetch("/api/get-json-from-curl", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify({ data: curlRequest }),
+        body: JSON.stringify({ curl: curlRequest }),
       });
       const respJson = await response.json();
+
       if (response.status === 200) {
-        try {
-          setStringifiedJson(JSON.stringify(respJson));
-          setCurlRequest("");
-          return;
-        } catch (e) {}
+        const data = getStringifiedTypes(
+          respJson,
+          spacing.current,
+          initialTypeLabel,
+          typeFormat
+        );
+        setConvertedData(data);
+        setStringifiedJson(JSON.stringify(respJson));
+        return;
       }
 
       alert(`Error: ${respJson.message}`);
     },
-    [curlRequest]
+    [curlRequest, initialTypeLabel, typeFormat]
   );
 
   return (
@@ -172,7 +159,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      {/* <form
+      <form
         className={`${styles.container} ${styles.curlInputWrapper}`}
         onSubmit={onSubmitCurl}
       >
@@ -183,7 +170,7 @@ const Home: NextPage = () => {
           onChange={(event) => setCurlRequest(event.target.value)}
         />
         <Button type="submit">Submit</Button>
-      </form> */}
+      </form>
       <div className={`${styles.container} ${styles.textBoxCtr}`}>
         <Textbox
           placeholder="Paste the JSON here..."
